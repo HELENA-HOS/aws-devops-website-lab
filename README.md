@@ -58,6 +58,7 @@ Durante este laboratório serão explorados conceitos como:
 │   ├── css/
 │   ├── js/
 │   └── assets/
+├── Dockerfile
 ├── README.md
 └── .gitignore
 ```
