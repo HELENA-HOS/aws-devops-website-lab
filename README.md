@@ -68,6 +68,8 @@ Durante este laboratório serão explorados conceitos como:
 
 Website validado localmente utilizando um servidor HTTP simples com Python.
 
+Containerização concluída com Docker e imagem publicada no Amazon Elastic Container Registry (ECR).
+
 ### Executar localmente
 
 ```bash
@@ -103,16 +105,23 @@ ps -ef | grep python
 ss -tulnp | grep 8080
 ```
 
+- Construção de imagens Docker
+- Criação de Dockerfile
+- Utilização da AWS CLI no Ubuntu (WSL)
+- Autenticação na AWS via AWS CLI
+- Publicação de imagens no Amazon ECR
+- Conceitos de registry de containers
+
 ---
 
 ## 📋 Próximos Passos
 
 - [x] Executar website localmente
 - [x] Validar funcionamento via HTTP Server
-- [ ] Criar Dockerfile
-- [ ] Gerar imagem Docker
-- [ ] Executar container localmente
-- [ ] Publicar imagem no Amazon ECR
+- [x] Criar Dockerfile
+- [x] Gerar imagem Docker
+- [x] Executar container localmente
+- [x] Publicar imagem no Amazon ECR
 - [ ] Realizar deploy em EC2
 - [ ] Automatizar infraestrutura com Terraform
 - [ ] Implementar CI/CD com GitHub Actions
