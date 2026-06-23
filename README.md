@@ -67,9 +67,53 @@ Durante este laboratório serão explorados conceitos como:
 
 ## ✅ Status Atual
 
-Website validado localmente utilizando um servidor HTTP simples com Python.
+## ✅ Status Atual
 
-Containerização concluída com Docker e imagem publicada no Amazon Elastic Container Registry (ECR).
+### Fase 1 concluída com sucesso
+
+Fluxo implementado:
+
+```text
+Website Estático
+↓
+Python HTTP Server
+↓
+Dockerfile
+↓
+Docker Image
+↓
+Amazon ECR
+↓
+Amazon EC2
+↓
+Docker Container
+↓
+Website publicado
+```
+
+### Executar localmente
+
+```bash
+cd website
+python3 -m http.server 8080
+```
+
+### Acessar localmente
+
+```text
+http://localhost:8080
+```
+
+### Deploy realizado
+
+- Container publicado no Amazon ECR
+- Instância Amazon EC2 criada
+- IAM Role associada à EC2
+- Policy AmazonEC2ContainerRegistryReadOnly aplicada
+- Autenticação via AWS STS
+- Pull da imagem diretamente do ECR
+- Container executado na EC2
+- Website acessível através do IP público da instância
 
 ### Executar localmente
 
@@ -88,17 +132,21 @@ http://localhost:8080
 
 ## 🔍 Aprendizados Praticados Até o Momento
 
+### Linux e Troubleshooting
+
 - Estruturação de projeto web estático
 - Navegação e manipulação de arquivos em Linux
 - Execução de servidor HTTP local
 - Conceitos de portas e processos
+- Diferença entre processo e serviço
 - Análise de logs HTTP (200, 304 e 404)
 - Troubleshooting básico com:
   - ps
   - ss
   - grep
+  - systemctl
 
-Exemplo:
+Exemplos:
 
 ```bash
 ps -ef | grep python
@@ -106,12 +154,54 @@ ps -ef | grep python
 ss -tulnp | grep 8080
 ```
 
-- Construção de imagens Docker
+### Docker
+
 - Criação de Dockerfile
-- Utilização da AWS CLI no Ubuntu (WSL)
-- Autenticação na AWS via AWS CLI
-- Publicação de imagens no Amazon ECR
+- Construção de imagens Docker
+- Execução de containers
+- Exposição de portas
+- Publicação de imagens em registry
+
+### AWS CLI
+
+- Instalação e configuração da AWS CLI no Ubuntu (WSL)
+- Autenticação na AWS via CLI
+- Integração com serviços AWS
+
+### Amazon ECR
+
+- Criação de repositório privado
+- Push de imagens Docker
+- Pull de imagens Docker
 - Conceitos de registry de containers
+
+### Amazon EC2
+
+- Criação de instância Amazon Linux 2023
+- Configuração de Security Groups
+- Acesso remoto via SSH utilizando chave privada (.pem)
+- Instalação e gerenciamento do Docker na EC2
+- Execução de containers em ambiente cloud
+
+### IAM e Segurança
+
+- Criação e associação de IAM Role à EC2
+- Utilização da policy AmazonEC2ContainerRegistryReadOnly
+- Aplicação do princípio do menor privilégio (Least Privilege)
+- Eliminação do uso de Access Keys na instância
+
+### AWS STS
+
+- Utilização de credenciais temporárias
+- Validação da identidade da Role através do comando:
+
+```bash
+aws sts get-caller-identity
+```
+
+- Compreensão da diferença entre:
+  - SSH + chave privada (.pem) → acesso ao sistema operacional
+  - IAM Role + STS → acesso da EC2 aos serviços AWS
 
 ---
 
@@ -123,7 +213,7 @@ ss -tulnp | grep 8080
 - [x] Gerar imagem Docker
 - [x] Executar container localmente
 - [x] Publicar imagem no Amazon ECR
-- [ ] Realizar deploy em EC2
+- [x] Realizar deploy manual em EC2
 - [ ] Automatizar infraestrutura com Terraform
 - [ ] Implementar CI/CD com GitHub Actions
 
@@ -137,7 +227,11 @@ ss -tulnp | grep 8080
 - Linux
 - Python HTTP Server
 - Docker
-- AWS
+- AWS CLI
+- Amazon ECR
+- Amazon EC2
+- IAM
+- AWS STS
 - Terraform
 - GitHub Actions
 
