@@ -67,8 +67,6 @@ Durante este laboratório serão explorados conceitos como:
 
 ## ✅ Status Atual
 
-## ✅ Status Atual
-
 ### Fase 1 concluída com sucesso
 
 Fluxo implementado:
