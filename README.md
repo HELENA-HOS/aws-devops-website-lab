@@ -15,6 +15,7 @@ Durante este laboratório serão explorados conceitos como:
 - Amazon ECR
 - Amazon EC2
 - IAM Roles
+- AWS STS
 - Networking AWS
 - Terraform (Infrastructure as Code)
 - GitHub Actions
@@ -32,7 +33,12 @@ Durante este laboratório serão explorados conceitos como:
 - Testes utilizando servidor HTTP local
 - Containerização utilizando Docker
 - Publicação da imagem em Amazon ECR
-- Deploy manual em instância EC2
+- Provisionamento manual de instância EC2
+- Configuração de Security Groups
+- Associação de IAM Role à EC2
+- Pull da imagem diretamente do Amazon ECR
+- Execução do container Docker na EC2
+- Publicação da aplicação através do IP público da instância
 
 ### Fase 2 – Infrastructure as Code (IaC)
 
@@ -112,19 +118,6 @@ http://localhost:8080
 - Pull da imagem diretamente do ECR
 - Container executado na EC2
 - Website acessível através do IP público da instância
-
-### Executar localmente
-
-```bash
-cd website
-python3 -m http.server 8080
-```
-
-### Acessar no navegador
-
-```text
-http://localhost:8080
-```
 
 ---
 
@@ -214,6 +207,34 @@ aws sts get-caller-identity
 - [x] Realizar deploy manual em EC2
 - [ ] Automatizar infraestrutura com Terraform
 - [ ] Implementar CI/CD com GitHub Actions
+
+---
+
+## 🚀 Melhorias Futuras
+
+Além das próximas fases previstas no laboratório, algumas evoluções poderão ser implementadas para aproximar a arquitetura de cenários utilizados em ambientes corporativos.
+
+### Segurança
+
+- Substituir o acesso SSH via chave privada (.pem) por AWS Systems Manager Session Manager.
+- Eliminar a necessidade de expor a porta 22 (SSH) no Security Group.
+- Avaliar a migração da instância EC2 para uma subnet privada, mantendo o acesso administrativo via Session Manager.
+
+### Infraestrutura
+
+- Provisionar toda a infraestrutura utilizando Terraform (EC2, Security Groups, IAM Roles e Amazon ECR).
+- Versionar toda a infraestrutura como código (Infrastructure as Code).
+
+### CI/CD
+
+- Automatizar o build da imagem Docker.
+- Automatizar a publicação da imagem no Amazon ECR.
+- Automatizar o deploy da aplicação utilizando GitHub Actions.
+
+### Observabilidade
+
+- Centralizar logs da aplicação utilizando Amazon CloudWatch.
+- Monitorar métricas da instância EC2 e do container.
 
 ---
 
