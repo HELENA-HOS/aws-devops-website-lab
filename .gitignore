@@ -50,8 +50,10 @@ docker-compose.override.yml
 # Terraform
 # ========================================
 
+# Diretório local do Terraform
 .terraform/
 
+# Terraform State
 *.tfstate
 *.tfstate.*
 
@@ -63,6 +65,12 @@ override.tf.json
 
 *_override.tf
 *_override.tf.json
+
+# Variáveis locais
+terraform.tfvars
+
+# Planos locais 
+*.tfplan
 
 
 # ========================================
