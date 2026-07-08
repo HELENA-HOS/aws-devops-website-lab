@@ -14,7 +14,7 @@ Durante este laboratório serão explorados conceitos como:
 - Docker
 - Amazon ECR
 - Amazon EC2
-- IAM Roles
+- IAM Roles e Instance Profiles
 - AWS STS
 - Networking AWS
 - Terraform (Infrastructure as Code)
@@ -42,9 +42,20 @@ Durante este laboratório serão explorados conceitos como:
 
 ### Fase 2 – Infrastructure as Code (IaC)
 
-- Provisionamento de recursos AWS com Terraform
-- Automação da infraestrutura
-- Reprodutibilidade de ambientes
+- Provisionamento automatizado da infraestrutura utilizando Terraform
+- Criação de Amazon EC2
+- Criação de Security Group
+- Criação de Amazon ECR
+- - Parametrização da infraestrutura utilizando `variables.tf`
+- - Separação entre código e configuração utilizando `terraform.tfvars`
+- Centralização de tags utilizando `locals`
+- Organização da infraestrutura em múltiplos arquivos Terraform
+- Execução do ciclo completo:
+  - terraform init
+  - terraform fmt
+  - terraform plan
+  - terraform apply
+- Gerenciamento do estado da infraestrutura (Terraform State)
 
 ### Fase 3 – CI/CD
 
@@ -59,11 +70,18 @@ Durante este laboratório serão explorados conceitos como:
 
 ```text
 .
+├── terraform/
+│   ├── provider.tf
+│   ├── variables.tf
+│   ├── locals.tf
+│   ├── ec2.tf
+│   ├── ecr.tf
+│   ├── terraform.tfvars.example
+│   └── .terraform.lock.hcl
 ├── website/
 │   ├── index.html
 │   ├── css/
-│   ├── js/
-│   └── assets/
+│   └── js/
 ├── Dockerfile
 ├── README.md
 └── .gitignore
@@ -73,25 +91,29 @@ Durante este laboratório serão explorados conceitos como:
 
 ## ✅ Status Atual
 
-### Fase 1 concluída com sucesso
+### Fases 1 e 2 concluídas com sucesso
 
-Fluxo implementado:
+Fluxo atual do projeto:
 
 ```text
 Website Estático
-↓
+        ↓
 Python HTTP Server
-↓
+        ↓
 Dockerfile
-↓
+        ↓
 Docker Image
-↓
+        ↓
 Amazon ECR
-↓
+        ↓
+Terraform
+        ↓
 Amazon EC2
-↓
+        ↓
+Security Group
+        ↓
 Docker Container
-↓
+        ↓
 Website publicado
 ```
 
@@ -108,16 +130,26 @@ python3 -m http.server 8080
 http://localhost:8080
 ```
 
-### Deploy realizado
+### Deploy manual realizado (Fase 1)
 
 - Container publicado no Amazon ECR
 - Instância Amazon EC2 criada
 - IAM Role associada à EC2
 - Policy AmazonEC2ContainerRegistryReadOnly aplicada
 - Autenticação via AWS STS
-- Pull da imagem diretamente do ECR
+- Pull da imagem diretamente do Amazon ECR
 - Container executado na EC2
 - Website acessível através do IP público da instância
+
+### Infraestrutura provisionada com Terraform (Fase 2)
+
+- Amazon EC2
+- Amazon ECR
+- Security Group
+- Regras de Security Group
+- IAM Instance Profile
+- Tags padronizadas
+- Infraestrutura criada automaticamente utilizando Terraform
 
 ---
 
@@ -194,6 +226,32 @@ aws sts get-caller-identity
   - SSH + chave privada (.pem) → acesso ao sistema operacional
   - IAM Role + STS → acesso da EC2 aos serviços AWS
 
+### Terraform (Infrastructure as Code)
+
+- Estruturação de infraestrutura como código
+- Organização da infraestrutura em múltiplos arquivos Terraform
+- Separação entre código e configuração (`terraform.tfvars`)
+- Parametrização utilizando variáveis
+- Reutilização através de `locals`
+- Padronização de tags utilizando `merge`
+- Provisionamento automatizado de:
+  - Amazon EC2
+  - Security Groups
+  - Amazon ECR
+- Controle de versões do provider (`.terraform.lock.hcl`)
+- Execução do fluxo completo:
+  - terraform init
+  - terraform fmt
+  - terraform plan
+  - terraform apply
+  - terraform destroy
+- Compreensão do funcionamento do Terraform State
+- Validação de alterações antes da aplicação utilizando `terraform plan`
+- Compreensão da diferença entre estado desejado e estado atual da infraestrutura
+- Identificação e correção de erro durante o provisionamento (IAM Instance Profile)
+- Reexecução do Terraform preservando recursos já provisionados através do Terraform State
+- Compreensão do funcionamento do Terraform Drift através da comparação entre infraestrutura declarada e infraestrutura existente.
+
 ---
 
 ## 📋 Próximos Passos
@@ -205,7 +263,10 @@ aws sts get-caller-identity
 - [x] Executar container localmente
 - [x] Publicar imagem no Amazon ECR
 - [x] Realizar deploy manual em EC2
-- [ ] Automatizar infraestrutura com Terraform
+- [x] Automatizar infraestrutura com Terraform
+- [ ] Implementar backend remoto para o Terraform State
+- [ ] Implementar Outputs
+- [ ] Utilizar Data Sources para descoberta automática de recursos AWS
 - [ ] Implementar CI/CD com GitHub Actions
 
 ---
@@ -222,8 +283,10 @@ Além das próximas fases previstas no laboratório, algumas evoluções poderã
 
 ### Infraestrutura
 
-- Provisionar toda a infraestrutura utilizando Terraform (EC2, Security Groups, IAM Roles e Amazon ECR).
-- Versionar toda a infraestrutura como código (Infrastructure as Code).
+- Migrar o Terraform State para backend remoto utilizando Amazon S3.
+- Utilizar Data Sources para descoberta automática de recursos como VPC e Amazon Linux AMI.
+- Evoluir a infraestrutura para uma arquitetura ainda mais reutilizável através de módulos Terraform.
+- Provisionar o bucket S3 de backend através de um projeto bootstrap Terraform.
 
 ### CI/CD
 
@@ -252,7 +315,38 @@ Além das próximas fases previstas no laboratório, algumas evoluções poderã
 - IAM
 - AWS STS
 - Terraform
+- HashiCorp Configuration Language (HCL)
 - GitHub Actions
+
+---
+
+## 📦 Versionamento
+
+Este projeto evolui de forma incremental, utilizando tags Git para representar cada marco importante da implementação.
+
+- v1.0.0 — Containerização e Deploy Manual
+- v2.0.0 — Infrastructure as Code com Terraform
+- v2.1.0 *(planejado)* — Backend remoto, Outputs e Data Sources
+- v3.0.0 *(planejado)* — Pipeline CI/CD com GitHub Actions
+
+---
+
+## 💡 Principais Conceitos Praticados
+
+Durante este projeto foram praticados conceitos amplamente utilizados em ambientes corporativos, incluindo:
+
+- Troubleshooting de infraestrutura Linux
+- Diagnóstico de conectividade e rede na AWS
+- Gerenciamento de identidade e autenticação (IAM, STS e Instance Profiles)
+- Infrastructure as Code (IaC)
+- Dockerização de aplicações
+- Provisionamento automatizado de infraestrutura
+- Gerenciamento de estado com Terraform
+- Parametrização e reutilização de código
+- Princípio do menor privilégio (Least Privilege)
+- Autenticação por credenciais temporárias (AWS STS)
+- Publicação de imagens no Amazon ECR
+- Deploy de containers em Amazon EC2
 
 ---
 
