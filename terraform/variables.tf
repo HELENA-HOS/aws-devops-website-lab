@@ -5,11 +5,6 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "ec2_ami_id" {
-  description = "ID da AMI do EC2 a ser utilizada."
-  type        = string
-}
-
 variable "instance_type" {
   description = "Tipo da instância EC2 a ser utilizada."
   type        = string
@@ -32,10 +27,6 @@ variable "project_name" {
   default     = "website"
 }
 
-variable "vpc_id" {
-  description = "ID do VPC onde a instância EC2 será criada."
-  type        = string
-}
 
 variable "allowed_ssh_cidr" {
   description = "CIDR block permitido para acesso SSH."

@@ -1,5 +1,5 @@
 resource "aws_instance" "website_server" {
-  ami                    = var.ec2_ami_id #Amazon Linux 2023 AMI
+  ami                    = data.aws_ami.amazon_linux.id
   instance_type          = var.instance_type
   key_name               = var.key_pair_name
   vpc_security_group_ids = [aws_security_group.website_sg.id]
@@ -16,7 +16,7 @@ resource "aws_instance" "website_server" {
 ## Security Group
 resource "aws_security_group" "website_sg" {
   name   = local.resource_names.sg
-  vpc_id = var.vpc_id
+  vpc_id = data.aws_vpc.default.id
   tags = merge(
     local.common_tags,
     {

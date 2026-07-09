@@ -3,8 +3,6 @@
 # e substitua os valores pelos da sua conta AWS.
 
 
-ec2_ami_id = "AMI ID"
-
 key_pair_name = "YOUR_KEY_PAIR"
 
 instance_type = "t3.micro"
@@ -12,7 +10,5 @@ instance_type = "t3.micro"
 iam_instance_profile = "ROLE_NAME"
 
 allowed_ssh_cidr = "YOUR_PUBLIC_IP/32"
-
-vpc_id = "YOUR_VPC_ID"
 
 repository_url = "YOUR_REPO_URL"
