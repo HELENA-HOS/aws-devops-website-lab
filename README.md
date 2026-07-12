@@ -46,8 +46,8 @@ Durante este laboratório serão explorados conceitos como:
 - Criação de Amazon EC2
 - Criação de Security Group
 - Criação de Amazon ECR
-- - Parametrização da infraestrutura utilizando `variables.tf`
-- - Separação entre código e configuração utilizando `terraform.tfvars`
+- Parametrização da infraestrutura utilizando `variables.tf`
+- Separação entre código e configuração utilizando `terraform.tfvars`
 - Centralização de tags utilizando `locals`
 - Organização da infraestrutura em múltiplos arquivos Terraform
 - Execução do ciclo completo:
@@ -56,6 +56,10 @@ Durante este laboratório serão explorados conceitos como:
   - terraform plan
   - terraform apply
 - Gerenciamento do estado da infraestrutura (Terraform State)
+- Utilização de Data Sources para descoberta automática de recursos AWS
+- Criação de Outputs para exposição de informações da infraestrutura
+- Configuração de Backend Remoto utilizando Amazon S3
+- Migração do Terraform State para backend remoto
 
 ### Fase 3 – CI/CD
 
@@ -71,13 +75,18 @@ Durante este laboratório serão explorados conceitos como:
 ```text
 .
 ├── terraform/
-│   ├── provider.tf
-│   ├── variables.tf
-│   ├── locals.tf
-│   ├── ec2.tf
-│   ├── ecr.tf
-│   ├── terraform.tfvars.example
+|   ├── provider.tf                → Configuração do Provider AWS
+|   ├── versions.tf                → Versionamento do Terraform e Providers
+|   ├── backend.tf                 → Backend remoto (Amazon S3)
+|   ├── data.tf                    → Descoberta automática de recursos AWS
+|   ├── variables.tf               → Declaração das variáveis
+|   ├── terraform.tfvars.example   → Valores específicos do ambiente
+|   ├── locals.tf                  → Valores reutilizáveis
+|   ├── ec2.tf                     → Instância EC2
+|   ├── ecr.tf                     → Repositório Amazon ECR
+|   ├── outputs.tf                 → Informações exportadas após o provisionamento
 │   └── .terraform.lock.hcl
+│ 
 ├── website/
 │   ├── index.html
 │   ├── css/
@@ -107,7 +116,9 @@ Docker Image
 Amazon ECR
         ↓
 Terraform
-        ↓
+        ↓                ↓
+Backend Remoto (Amazon S3)
+        ↓  
 Amazon EC2
         ↓
 Security Group
@@ -245,12 +256,16 @@ aws sts get-caller-identity
   - terraform plan
   - terraform apply
   - terraform destroy
-- Compreensão do funcionamento do Terraform State
+- Compreensão do funcionamento do Terraform State Local e Remoto
 - Validação de alterações antes da aplicação utilizando `terraform plan`
 - Compreensão da diferença entre estado desejado e estado atual da infraestrutura
 - Identificação e correção de erro durante o provisionamento (IAM Instance Profile)
 - Reexecução do Terraform preservando recursos já provisionados através do Terraform State
 - Compreensão do funcionamento do Terraform Drift através da comparação entre infraestrutura declarada e infraestrutura existente.
+- Configuração de Backend Remoto utilizando Amazon S3
+- Migração do Terraform State para Backend Remoto
+- Utilização de Data Sources para descoberta automática de recursos (AMI e VPC)
+- Utilização de Outputs para integração entre infraestrutura e automações futuras
 
 ---
 
@@ -264,9 +279,9 @@ aws sts get-caller-identity
 - [x] Publicar imagem no Amazon ECR
 - [x] Realizar deploy manual em EC2
 - [x] Automatizar infraestrutura com Terraform
-- [ ] Implementar backend remoto para o Terraform State
-- [ ] Implementar Outputs
-- [ ] Utilizar Data Sources para descoberta automática de recursos AWS
+- [x] Implementar backend remoto para o Terraform State
+- [x] Implementar Outputs
+- [x] Utilizar Data Sources para descoberta automática de recursos AWS
 - [ ] Implementar CI/CD com GitHub Actions
 
 ---
@@ -283,10 +298,9 @@ Além das próximas fases previstas no laboratório, algumas evoluções poderã
 
 ### Infraestrutura
 
-- Migrar o Terraform State para backend remoto utilizando Amazon S3.
-- Utilizar Data Sources para descoberta automática de recursos como VPC e Amazon Linux AMI.
 - Evoluir a infraestrutura para uma arquitetura ainda mais reutilizável através de módulos Terraform.
-- Provisionar o bucket S3 de backend através de um projeto bootstrap Terraform.
+- Refinar a seleção da AMI utilizando filtros mais específicos ou AWS Systems Manager Parameter Store (SSM), simulando estratégias adotadas em ambientes corporativos para utilização de imagens homologadas.
+
 
 ### CI/CD
 
@@ -326,7 +340,7 @@ Este projeto evolui de forma incremental, utilizando tags Git para representar c
 
 - v1.0.0 — Containerização e Deploy Manual
 - v2.0.0 — Infrastructure as Code com Terraform
-- v2.1.0 *(planejado)* — Backend remoto, Outputs e Data Sources
+- v2.1.0 — Backend remoto, Outputs e Data Sources
 - v3.0.0 *(planejado)* — Pipeline CI/CD com GitHub Actions
 
 ---
@@ -347,6 +361,9 @@ Durante este projeto foram praticados conceitos amplamente utilizados em ambient
 - Autenticação por credenciais temporárias (AWS STS)
 - Publicação de imagens no Amazon ECR
 - Deploy de containers em Amazon EC2
+- Backend Remoto para Terraform
+- Data Sources
+- Outputs
 
 ---
 
